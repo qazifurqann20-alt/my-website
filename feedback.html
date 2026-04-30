@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Feedback — PRIMESOLE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">PRIMESOLE®</a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <h1>Feedback</h1>
+    <p>We value your feedback. Help us improve!</p>
+  </div>
+
+  <div class="feedback-container">
+
+    <div class="feedback-card">
+
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" id="fb-name" placeholder="Enter your name">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="fb-email" placeholder="Enter your email">
+      </div>
+
+      <!-- Rating -->
+      <div class="form-group">
+        <label>Rating</label>
+        <div class="rating-stars" id="rating-stars">
+          <span onclick="setRating(1)">★</span>
+          <span onclick="setRating(2)">★</span>
+          <span onclick="setRating(3)">★</span>
+          <span onclick="setRating(4)">★</span>
+          <span onclick="setRating(5)">★</span>
+        </div>
+      </div>
+
+      <!-- Message -->
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="fb-message" rows="4" placeholder="Write your feedback..."></textarea>
+      </div>
+
+      <button class="btn-primary" style="width:100%;" onclick="submitFeedback()">Submit Feedback</button>
+
+    </div>
+
+    <!-- Show Feedback -->
+    <div class="feedback-list" id="feedback-list"></div>
+
+  </div>
+
+</div>
+
+<script>
+let rating = 0;
+
+function setRating(r) {
+  rating = r;
+  const stars = document.querySelectorAll("#rating-stars span");
+  stars.forEach((s, i) => {
+    s.classList.toggle("active", i < r);
+  });
+}
+
+function submitFeedback() {
+  const name = document.getElementById("fb-name").value;
+  const email = document.getElementById("fb-email").value;
+  const message = document.getElementById("fb-message").value;
+
+  if (!name || !email || !message || rating === 0) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  const feedback = {
+    name, email, message, rating
+  };
+
+  let list = JSON.parse(localStorage.getItem("feedbackList")) || [];
+  list.unshift(feedback);
+  localStorage.setItem("feedbackList", JSON.stringify(list));
+
+  alert("Feedback submitted!");
+  location.reload();
+}
+
+function loadFeedback() {
+  const list = JSON.parse(localStorage.getItem("feedbackList")) || [];
+  const container = document.getElementById("feedback-list");
+
+  container.innerHTML = list.map(f => `
+    <div class="feedback-item">
+      <div class="feedback-header">
+        <strong>${f.name}</strong>
+        <span>${"★".repeat(f.rating)}</span>
+      </div>
+      <p>${f.message}</p>
+    </div>
+  `).join("");
+}
+
+document.addEventListener("DOMContentLoaded", loadFeedback);
+</script>
+
+</body>
+</html>

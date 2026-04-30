@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout — PRIMESOLE</title>
+  <meta name="description" content="Enter your shipping and payment details to complete your order."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">PRIMESOLE<span>®</span></a>
+    <div class="nav-actions">
+      <a href="wishlist.html" class="nav-btn" title="Wishlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span>Wishlist</span>
+        <span class="nav-badge" id="wish-badge">0</span>
+      </a>
+      <a href="cart.html" class="nav-btn" title="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span>Cart</span>
+        <span class="nav-badge" id="cart-badge">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Order Confirmation Screen (hidden by default) -->
+<div class="page-wrapper">
+  <div id="confirmation-screen" class="confirmation-screen">
+    <div class="confirmation-icon">✓</div>
+    <h2>Order Placed!</h2>
+    <p>Thank you for your order. We'll send you a shipping confirmation once your package is on its way.</p>
+    <div class="order-number" id="order-number">ORD-XXXXXXXXX</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;">
+      <a href="index.html" class="btn-primary">Continue Shopping</a>
+    </div>
+  </div>
+
+  <!-- Checkout Content -->
+  <div id="checkout-content">
+    <div class="page-header">
+      <h1>Checkout</h1>
+      <p>Complete your purchase securely</p>
+    </div>
+
+    <div class="cart-layout">
+      <!-- Left: Form -->
+      <div>
+        <form id="checkout-form" novalidate>
+
+          <!-- Contact Section -->
+          <div class="form-card">
+            <h2>Contact Information</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first-name" placeholder="furqan" required autocomplete="given-name"/>
+                <span class="field-error" id="first-name-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="last-name">Last Name</label>
+                <input type="text" id="last-name" name="last-name" placeholder="qazi" required autocomplete="family-name"/>
+                <span class="field-error" id="last-name-error"></span>
+              </div>
+            </div>
+            <div class="form-row" style="margin-top:14px;">
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="qazifurqann30@gmail.com" required autocomplete="email"/>
+                <span class="field-error" id="email-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="+91 8200 0000 00" required autocomplete="tel"/>
+                <span class="field-error" id="phone-error"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Section -->
+          <div class="form-card">
+            <h2>Shipping Address</h2>
+            <div class="form-row full" style="margin-bottom:14px;">
+              <div class="form-group">
+                <label for="address">Street Address</label>
+                <input type="text" id="address" name="address" placeholder="123 Main Street, Apt 4B" required autocomplete="street-address"/>
+                <span class="field-error" id="address-error"></span>
+              </div>
+            </div>
+            <div class="form-row" style="margin-bottom:14px;">
+              <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" placeholder="mumbai" required autocomplete="address-level2"/>
+                <span class="field-error" id="city-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="state">State / Province</label>
+                <input type="text" id="state" name="state" placeholder="maharashtra" required autocomplete="address-level1"/>
+                <span class="field-error" id="state-error"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="postal-code">Postal Code</label>
+                <input type="text" id="postal-code" name="postal-code" placeholder="4000 72" required autocomplete="postal-code"/>
+                <span class="field-error" id="postal-code-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" placeholder="india" required autocomplete="country-name"/>
+                <span class="field-error" id="country-error"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Section -->
+          <div class="form-card">
+            <h2>Payment Details</h2>
+            <div style="display:flex;gap:8px;margin-bottom:18px;padding:10px 14px;background:var(--color-bg);border-radius:var(--radius-sm);border:1px solid var(--color-border);align-items:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span style="font-size:12px;color:var(--color-text-secondary);">Your payment information is encrypted and secure. This is a demo — no real transactions occur.</span>
+            </div>
+            <div class="form-row full" style="margin-bottom:14px;">
+              <div class="form-group">
+                <label for="card-number">Card Number</label>
+                <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required autocomplete="cc-number"/>
+                <span class="field-error" id="card-number-error"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="card-name">Name on Card</label>
+                <input type="text" id="card-name" name="card-name" placeholder="furqan qazi" required autocomplete="cc-name"/>
+                <span class="field-error" id="card-name-error"></span>
+              </div>
+              <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <label for="card-expiry" style="font-size:12px;font-weight:600;letter-spacing:0.04em;color:var(--color-text-secondary);text-transform:uppercase;">Expiry</label>
+                  <input type="text" id="card-expiry" name="card-expiry" placeholder="MM/YY" maxlength="5" required autocomplete="cc-exp"/>
+                  <span class="field-error" id="card-expiry-error"></span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:6px;">
+                  <label for="card-cvv" style="font-size:12px;font-weight:600;letter-spacing:0.04em;color:var(--color-text-secondary);text-transform:uppercase;">CVV</label>
+                  <input type="text" id="card-cvv" name="card-cvv" placeholder="123" maxlength="4" required autocomplete="cc-csc"/>
+                  <span class="field-error" id="card-cvv-error"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Place Order Button -->
+          <button type="submit" class="btn-primary" style="width:100%;padding:16px;font-size:15px;" id="place-order-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Place Order
+          </button>
+          <p style="font-size:12px;color:var(--color-text-muted);text-align:center;margin-top:12px;">By placing your order, you agree to our Terms of Service and Privacy Policy.</p>
+        </form>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <div>
+        <div class="order-summary">
+          <h2>Order Summary</h2>
+          <div class="checkout-item-list" id="checkout-items"></div>
+          <div class="summary-line">
+            <span>Subtotal</span>
+            <span id="co-subtotal">$0</span>
+          </div>
+          <div class="summary-line">
+            <span>Shipping</span>
+            <span id="co-shipping">—</span>
+          </div>
+          <div class="summary-line total">
+            <span>Total</span>
+            <span id="co-total">$0</span>
+          </div>
+          <div style="margin-top:16px;padding:12px;background:var(--color-bg);border-radius:var(--radius-sm);border:1px solid var(--color-border);">
+            <p style="font-size:12px;color:var(--color-text-secondary);display:flex;gap:8px;align-items:center;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Orders over ₹12,599 qualify for free shipping
+            </p>
+          </div>
+          <a href="cart.html" class="btn-ghost" style="width:100%;justify-content:center;margin-top:16px;border:1px solid var(--color-border);border-radius:var(--radius-md);">
+            ← Edit Cart
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer style="border-top:1px solid var(--color-border);padding:32px 24px;background:var(--color-surface);">
+  <div style="max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <a href="index.html" style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;">PRIMESOLE<span style="color:var(--color-text-secondary);font-weight:400;">®</span></a>
+    <p style="font-size:12px;color:var(--color-text-muted);">© 2026 PRIMESOLE. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="products.js"></script>
+<script src="cart.js"></script>
+<script src="checkout.js"></script>
+</body>
+</html>

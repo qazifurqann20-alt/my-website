@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart — PRIMESOLE</title>
+  <meta name="description" content="Review your selected items, update quantities, and proceed to checkout."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">PRIMESOLE<span>®</span></a>
+    <div class="nav-actions">
+      <a href="wishlist.html" class="nav-btn" title="Wishlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span>Wishlist</span>
+        <span class="nav-badge" id="wish-badge">0</span>
+      </a>
+      <a href="cart.html" class="nav-btn" title="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span>Cart</span>
+        <span class="nav-badge" id="cart-badge">0</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+  <div class="page-header">
+    <h1>Shopping Cart</h1>
+    <p>Review and update your selected items</p>
+  </div>
+
+  <!-- Empty State (hidden when cart has items) -->
+  <div class="empty-state" id="empty-state" style="display:none;">
+    <div class="empty-state-icon">🛒</div>
+    <h2>Your cart is empty</h2>
+    <p>Looks like you haven't added anything yet. Start browsing and find something you love.</p>
+    <a href="index.html" class="btn-primary">Continue Shopping</a>
+  </div>
+
+  <!-- Cart Layout -->
+  <div class="cart-layout" id="cart-layout">
+    <!-- Item List -->
+    <div>
+      <div class="item-list" id="cart-items"></div>
+    </div>
+    <!-- Order Summary -->
+    <div>
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+        <div class="summary-line">
+          <span>Subtotal (<span id="item-count">0</span> items)</span>
+          <span id="subtotal-val">₹0</span>
+        </div>
+        <div class="summary-line">
+          <span>Shipping</span>
+          <span id="shipping-val">—</span>
+        </div>
+        <div class="summary-line total">
+          <span>Total</span>
+          <span id="total-val">₹0</span>
+        </div>
+        <a href="checkout.html" class="btn-primary" style="width:100%;margin-top:20px;display:flex;" id="checkout-cta">
+          Proceed to Checkout
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:6px"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="index.html" class="btn-ghost" style="width:100%;justify-content:center;margin-top:10px;">
+          ← Continue Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer style="border-top:1px solid var(--color-border);padding:32px 24px;background:var(--color-surface);">
+  <div style="max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+    <a href="index.html" style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;">PRIMESOLE<span style="color:var(--color-text-secondary);font-weight:400;">®</span></a>
+    <p style="font-size:12px;color:var(--color-text-muted);">© 2026 PRIMESOLE®. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="products.js"></script>
+<script src="cart.js"></script>
+<script>
+  function renderCart() {
+    const cart = getCart();
+    const cartItemsEl = document.getElementById('cart-items');
+    const emptyState = document.getElementById('empty-state');
+    const cartLayout = document.getElementById('cart-layout');
+
+    if (cart.length === 0) {
+      emptyState.style.display = 'flex';
+      cartLayout.style.display = 'none';
+      return;
+    }
+
+    emptyState.style.display = 'none';
+    cartLayout.style.display = 'grid';
+
+    cartItemsEl.innerHTML = cart.map(item => {
+      const product = PRODUCTS.find(p => p.id === item.id);
+      if (!product) return '';
+      const lineTotal = product.price * item.qty;
+      return `
+        <div class="item-row" id="row-${item.id}-${encodeURIComponent(item.size)}">
+          <div class="item-thumb">
+            <img src="${product.image}" alt="${product.name}" loading="lazy"/>
+          </div>
+          <div class="item-info">
+            <div class="item-name">${product.name}</div>
+            <div class="item-meta">Size: ${item.size} &nbsp;·&nbsp; ${product.tag}</div>
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="changeQty(${item.id}, '${item.size}', ${item.qty - 1})" title="Decrease">−</button>
+              <span class="qty-value" id="qty-${item.id}-${encodeURIComponent(item.size)}">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${item.id}, '${item.size}', ${item.qty + 1})" title="Increase">+</button>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px;flex-shrink:0;">
+            <div class="item-price">₹${lineTotal}</div>
+            <button class="btn-ghost" onclick="handleRemove(${item.id}, '${item.size}')" title="Remove item" style="padding:6px 8px;font-size:12px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+              </svg>
+              Remove
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    updateSummary();
+  }
+
+  function changeQty(id, size, newQty) {
+    updateQty(id, size, newQty);
+    renderCart();
+  }
+
+  function handleRemove(id, size) {
+    removeFromCart(id, size);
+    renderCart();
+    showToast('Item removed from cart');
+  }
+
+  function updateSummary() {
+    const cart = getCart();
+    const subtotal = getCartTotal();
+    const itemCount = cart.reduce((s, i) => s + i.qty, 0);
+    const shipping = subtotal === 0 ? 0 : (subtotal >= 12599 ? 0 : 999);
+    const total = subtotal + shipping;
+
+    document.getElementById('item-count').textContent = itemCount;
+    document.getElementById('subtotal-val').textContent = formatPrice(subtotal);
+    document.getElementById('shipping-val').innerHTML = subtotal === 0
+      ? '—'
+      : shipping === 0
+        ? '<span class="free">Free</span>'
+        : formatPrice(shipping);
+    document.getElementById('total-val').textContent = formatPrice(total);
+  }
+
+  document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+</body>
+</html>

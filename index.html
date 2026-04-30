@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PRIMESOLE — Step Into Perfection</title>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="nav">
+  <div class="nav-inner">
+
+    <a href="index.html" class="nav-logo">PRIMESOLE®</a>
+
+    <div class="nav-actions">
+
+      <!-- PROFILE -->
+      <div id="user-section" style="display:none;position:relative;">
+
+        <div onclick="toggleProfile()" 
+             style="cursor:pointer;font-size:13px;font-weight:600;">
+          <span id="user-name"></span>
+        </div>
+
+        <div id="profile-dropdown"
+             style="display:none;position:absolute;right:0;top:30px;
+             background:#fff;border:1px solid #ddd;border-radius:8px;
+             padding:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+
+          <button class="btn-ghost" onclick="logout()">Logout</button>
+
+        </div>
+      </div>
+
+      <!-- LOGIN -->
+      <a href="login.html" class="nav-btn" id="login-btn">Login</a>
+
+      <!-- HELP -->
+      <a href="help.html" class="nav-btn">Help</a>
+
+      <!-- FEEDBACK -->
+      <a href="feedback.html" class="nav-btn">Feedback</a>
+
+      <!-- WISHLIST -->
+      
+      <!-- CART -->
+      <a href="cart.html" class="nav-btn">
+        <span>Cart</span>
+        <span class="nav-badge" id="cart-badge">0</span>
+      </a>
+
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<div style="background:#1A1A1A;color:#fff;padding:60px 24px;">
+  <div style="max-width:1280px;margin:auto;">
+    <h1 style="font-size:42px;">Timeless Fashion</h1>
+    <p>PRIMESOLE - Step Into Perfection</p>
+  </div>
+</div>
+
+<!-- ================= PRODUCTS ================= -->
+<div class="page-wrapper">
+
+  <div class="page-header">
+    <h2>All Products</h2>
+    <p>Browse collection</p>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('All', event)">All</button>
+    <button class="filter-btn" onclick="setFilter('Men', event)">Men</button>
+    <button class="filter-btn" onclick="setFilter('Women', event)">Women</button>
+    <button class="filter-btn" onclick="setFilter('Accessories', event)">Essentials</button>
+  </div>
+
+  <!-- GRID -->
+  <div class="product-grid" id="product-grid"></div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer style="border-top:1px solid #ddd;padding:20px;text-align:center;">
+  <div style="display:flex;gap:20px;justify-content:center;">
+    <a href="cart.html">Cart</a>
+    <a href="checkout.html">Checkout</a>
+    <a href="help.html">Help</a>
+    <a href="feedback.html">Feedback</a>
+  </div>
+  <p style="margin-top:10px;">© 2026 PRIMESOLE®</p>
+</footer>
+
+<!-- ================= SCRIPTS ================= -->
+<script src="products.js"></script>
+<script src="cart.js"></script>
+
+<script>
+
+/* ========= LOGIN / PROFILE ========= */
+
+function checkLogin() {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const loginBtn = document.getElementById("login-btn");
+  const userSection = document.getElementById("user-section");
+  const userName = document.getElementById("user-name");
+
+  if (isLoggedIn && user) {
+    loginBtn.style.display = "none";
+    userSection.style.display = "block";
+    userName.textContent = "Hi, " + user.name;
+  } else {
+    loginBtn.style.display = "block";
+    userSection.style.display = "none";
+  }
+}
+
+function toggleProfile() {
+  const dropdown = document.getElementById("profile-dropdown");
+  dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+}
+
+function logout() {
+  localStorage.removeItem("isLoggedIn");
+  alert("Logged out");
+  window.location.href = "login.html"; // redirect to login page
+}
+
+/* Close dropdown when clicking outside */
+document.addEventListener("click", function(e) {
+  const profile = document.getElementById("user-section");
+  const dropdown = document.getElementById("profile-dropdown");
+
+  if (profile && !profile.contains(e.target)) {
+    dropdown.style.display = "none";
+  }
+});
+
+/* ========= PRODUCTS ========= */
+
+let currentFilter = "All";
+
+function setFilter(cat, event) {
+  currentFilter = cat;
+
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  event.target.classList.add("active");
+
+  renderProducts();
+}
+
+function renderProducts() {
+  const grid = document.getElementById("product-grid");
+
+  const filtered = currentFilter === "All"
+    ? PRODUCTS
+    : PRODUCTS.filter(p => p.category === currentFilter);
+
+  grid.innerHTML = filtered.map(p => `
+    <div class="product-card">
+      <div class="product-card-image-wrap">
+        <img src="${p.image}" alt="${p.name}">
+      </div>
+
+      <div class="product-card-body">
+        <div class="product-card-name">${p.name}</div>
+        <div class="product-card-price">${formatPrice(p.price)}</div>
+
+        <button onclick="addToCart(${p.id}, '${p.sizes[0]}')" class="add-to-cart-btn">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ========= INIT ========= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  checkLogin();
+  renderProducts();
+});
+
+</script>
+
+</body>
+</html>
